@@ -14,7 +14,7 @@ export default {
   },
   mounted() {
     this.callAzureLogicApp() // Initial execution
-    setInterval(this.callAzureLogicApp, 10000) // 10 seconds
+    setInterval(this.callAzureLogicApp, 60000) // 60 seconds
   },
   methods: {
     getCurrentDate() {
