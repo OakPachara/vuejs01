@@ -3,6 +3,8 @@ import TheWelcome from '../components/TheWelcome.vue'
 </script>
 
 <script>
+import axios from 'axios'
+
 export default {
   name: 'MyComponent',
   data() {
@@ -11,11 +13,11 @@ export default {
     }
   },
   mounted() {
-    this.intervalFunction() // Initial execution
-    setInterval(this.intervalFunction, 10000) // 10 seconds
+    this.callAzureLogicApp() // Initial execution
+    setInterval(this.callAzureLogicApp, 10000) // 10 seconds
   },
   methods: {
-    intervalFunction() {
+    getCurrentDate() {
       const currentDate = new Date()
       const hours = currentDate.getHours()
       const minutes = currentDate.getMinutes()
@@ -24,12 +26,23 @@ export default {
 
       const currentTime = hours * 3600 + minutes * 60 + seconds
       const timeDifference = this.latestTrickTime === 0 ? 0 : currentTime - this.latestTrickTime
-
-      if (timeDifference <= 12)
-        console.log(`${formattedDate} - Time Difference: ${timeDifference} sec`)
-      else console.warn(`${formattedDate} - Time Difference: ${timeDifference} sec`)
-
       this.latestTrickTime = currentTime
+
+      return `${formattedDate} - Time Difference: ${timeDifference} sec`
+    },
+    callAzureLogicApp() {
+      axios
+        .get(
+          'https://prod-59.southeastasia.logic.azure.com:443/workflows/15724ec6420c46f8af7e5ee7b5dcae7d/triggers/request/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Frequest%2Frun&sv=1.0&sig=txoN2gzu9nG6hwWsjISvJ9u4OlmBbDU-djsSG9-wzB4'
+        )
+        .then((response) => {
+          // Handle the response data here
+          console.log(`${response.status} - ${this.getCurrentDate()}`)
+        })
+        .catch((error) => {
+          // Handle any errors here
+          console.error(error)
+        })
     }
   }
 }
