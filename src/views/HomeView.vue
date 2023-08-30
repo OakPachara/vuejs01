@@ -20,12 +20,14 @@ export default {
       const hours = currentDate.getHours()
       const minutes = currentDate.getMinutes()
       const seconds = currentDate.getSeconds()
-      const formattedDate = `Normal interval - ${hours}:${minutes}:${seconds}`
+      const formattedDate = `Interval - ${hours}:${minutes}:${seconds}`
 
       const currentTime = hours * 3600 + minutes * 60 + seconds
       const timeDifference = this.latestTrickTime === 0 ? 0 : currentTime - this.latestTrickTime
 
-      console.log(`${formattedDate} - Time Difference: ${timeDifference} seconds`)
+      if (timeDifference <= 12)
+        console.log(`${formattedDate} - Time Difference: ${timeDifference} sec`)
+      else console.warn(`${formattedDate} - Time Difference: ${timeDifference} sec`)
 
       this.latestTrickTime = currentTime
     }
